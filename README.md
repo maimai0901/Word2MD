@@ -105,27 +105,7 @@ A user-friendly online document converter that transforms various file formats i
 - 转换时间：根据文件大小可能需要几秒到几分钟不等 | Conversion time: May take seconds to minutes depending on file size
 - 隐私考虑：所有文件都会上传到你的 GitHub 仓库 | Privacy: All files are uploaded to your GitHub repository
 
-## 🔧 常见问题 | Troubleshooting
 
-1. **文件上传失败 | File Upload Failed**
-   - 检查文件大小是否超过限制 | Check if file size exceeds limit
-   - 确认 Token 权限是否正确 | Verify token permissions
-   - 检查网络连接 | Check network connection
+## License
 
-2. **转换失败 | Conversion Failed**
-   - 确认文件格式是否支持 | Verify file format is supported
-   - 检查文件是否损坏 | Check if file is corrupted
-   - 查看 GitHub Actions 日志了解详情 | Check GitHub Actions logs for details
-
-3. **找不到转换后的文件 | Cannot Find Converted File**
-   - 等待几分钟让转换完成 | Wait a few minutes for conversion
-   - 刷新页面 | Refresh the page
-   - 检查 GitHub Actions 运行状态 | Check GitHub Actions status
-
-## 🤝 贡献 | Contributing
-
-欢迎提交 Pull Request 或提出建议！| Contributions are welcome!
-
-## 📄 许可证 | License
-
-本项目采用 MIT 许可证 | This project is licensed under the MIT License
+This project is licensed under the MIT License
