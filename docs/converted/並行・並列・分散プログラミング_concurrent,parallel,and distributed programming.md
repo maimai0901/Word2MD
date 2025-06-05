@@ -1,190 +1,201 @@
-# $BJB9T!&JBNs!&J,;6(B$B%W%m%0%i%\_%s%0(B/concurrent,parallel,and distributed programming
+# 並行・並列・分散プログラミング/concurrent,parallel,and distributed programming
 
 ```
-$BJB9T(B$B%7%9%F%`(B
+並行システム
 
-                               $B%7%9%F%`(B$B>pJs7O(B/$B>pJs9)3X0h(B,
-			       $B%7%9%F%`(B$B>pJs9)3X8&5f72(B/$B>pJsM}9)3X0L(B$B%W%m%0%i%`(B
-			       $B%7%9%F%`(B$B>pJs9)3X8&5f2J(B/$B%3%s%T%e!<%?%5%$%(%s%9(B$B@l96(B
-                               [$B?7>k(B $BLw(B](http://www.cs.tsukuba.ac.jp/~yas/)
+                               システム情報系/情報工学域,
+			       システム情報工学研究群/情報理工学位プログラム
+			       システム情報工学研究科/コンピュータサイエンス専攻
+                               新城 靖
                                <yas@cs.tsukuba.ac.jp>
 
 ```
 
-$B$3$N(B$B%Z!<%8(B$B$O!"
+このページは、次の URL にあります。
  `<http://www.cs.tsukuba.ac.jp/~yas/cs/csys-2023/2023-04-14>`
-$B$"$k$$$O!"$B%Z!<%8(B$B$+$i
+あるいは、次のページから手繰っていくこともできます。
  `<http://www.cs.tsukuba.ac.jp/~yas/cs/>`
  `<http://www.cs.tsukuba.ac.jp/~yas/>`
 
-## $B"#:#F|$N=EMW$JOC(B
+## ■今日の重要な話
 
-$BMQ8l$N0U5A(B
+用語の意義
 
-* $BJB9T(B concurrent
-* $BJBNs(B parallel
-* $BJ,;6(B distributed
+* 並行 concurrent
+* 並列 parallel
+* 分散 distributed
 
-$BNr;K(B history
+歴史 history
 
-* $B#O#S$HC10l(B$B%W%m%0%i%\_%s%0(B$B!?(B$B%^%k%A%W%m%0%i%\_%s%0(B OS and sequential programming/ multiprogramming
-* $BF14|DL?.(B$B%W%j%\_%F%#%V(B$B!#(B$B%m%C%/(B$B!"(B$B%;%^%U%)(B$B!"(B$B%b%K%?(B$B!"(B$B%i%s%G%V(B$B!#(B
+* ＯＳと単一プログラミング／マルチプログラミング OS and sequential programming/ multiprogramming
+* 同期通信プリミティブ。ロック、セマフォ、モニタ、ランデブ。
   Synchronization primitives. locks, semaphores, monitors, rendezvous.
-* $B%W%m%0%i%\_%s%0(B$B8@8l$K$h$k;Y1g!#(B
+* プログラミング言語による支援。
   Programming language support.
-* SMP $B$H(B$B%9%l%C%I(B$B!#(B
+* SMP とスレッド。
   SMP and threads.
 
-$B%O!<%I%&%'%"(B
+ハードウェア
 
 * UMA (Uniform Memory Access), SMP (Symmetric Multiprocessor)
 * NUMA (Non-uniform Memory Access)
 * NORMA (No-Remote Memory Access)
 
-$B3d$j9~$\_$HJB9T(B$B%W%m%0%i%\_%s%0(B
+割り込みと並行プログラミング
 Interrupts and concurrent programming
 
-* $B3d$j9~$\_6X;\_$K$h$kAj8\_GS=|!#(B
+* 割り込み禁止による相互排除。
   mutual exclusion by disabusing interrupts
 
-## $B"#JB9T!&JBNs!&J,;6(B$B%W%m%0%i%\_%s%0(B(concurrent, parallel, and distributed programming)
+## ■並行・並列・分散プログラミング(concurrent, parallel, and distributed programming)
 
-### $B"!C`$B%W%m%0%i%\_%s%0(B$B$HJB9T(B$B%W%m%0%i%\_%s%0(B(sequential and concurrent programming)
+### ◆逐次プログラミングと並行プログラミング(sequential and concurrent programming)
 
-$BC`: $B#1EY$K#1$D$N $BJB9T(B concurrent : $B#1EY$KJ#?t$N
+逐次 sequential
+:   １度に１つの手続きが実行される
+
+並行 concurrent
+:   １度に複数の手続きが実行される
 
 ```
 main()
 {
-	printf("hello, world!\n");$B!!(B
+	printf("hello, world!\n");
 }
 
 ```
 
-$BC`$B%W%m%0%i%`(B$B$G$O!"(B1$BEY$K(B1$B$D$N
+逐次プログラムでは、1度に1つの手続き(関数)(procedure(function))しか実行
+されない。printf() が動くと main() は止まる。
 
-$BJ#?t$N$B%W%m%;%9(B(process)$B!W$d!V(B$B%9%l%C%I(B
-(thread)$B!W!#(B
+複数の手続きを実行する主体は、「プロセス(process)」や「スレッド
+(thread)」。
 
-![$B=D<4;~4V!](./$BJB9T!&JBNs!&J,;6%W%m%0%i%_%s%0(B_concurrent,parallel,and distributed programming_files/seq-con-threads-coordinate.png)
+![縦軸時間、横軸空間、スレッドが協調している](./並行・並列・分散プログラミング_concurrent,parallel,and distributed programming_files/seq-con-threads-coordinate.png)
 
-**$B?^(B? $BC`$B%W%m%0%i%`(B$B$HJB9T(B$B%W%m%0%i%`(B$B$NF0:n(B($B;~4V$H6u4V$N4QE@$+$i(B)**
+**図? 逐次プログラムと並行プログラムの動作(時間と空間の観点から)**
 
-### $B"!JBNs=hM}$HJ,;6=hM}$NL\E\*(B (Objectives of parallel processing and distributed processing)
+### ◆並列処理と分散処理の目的 (Objectives of parallel processing and distributed processing)
 
-$BJBNs(B parallel
-:   $B#1$D$NLdBj$r!JC`
+並列 parallel
+:   １つの問題を（逐次処理より）速く(faster)解きたい
 
-    $BJ,;6(B distributed (A)
-    :   **$BN%$l$F$$$F$b?4$O#1$D(B** sharing one heart between two separate lovers
+分散 distributed (A)
+:   **離れていても心は１つ** sharing one heart between two separate lovers
 
-    $BJ,;6(B distributed (B)
-    :   1$BBf$N(B$B%3%s%T%e!<%?(B$B$N(B$B%a%b%j(B$B$K>h$i$J$$(B$B%G!<%?(B$B$r07$$$?$$!#(B
-        (2$B
+分散 distributed (B)
+:   1台のコンピュータのメモリに乗らないデータを扱いたい。
+    (2次記憶と置換ながらなら動く。)
 
-$B$3$N
+この授業では「分散 distributed (B)」は、並列の一種として扱う。
+分散処理の目的として「分散 distributed (A)」を扱う。
 
-$B!VJ,;6(B distributed (A)$B!W$O!"C`
+「分散 distributed (A)」は、逐次処理より遅くなっても良い。
+次のようなことを実現したい。
 
-* $B%U%)!<%k%H%H%l%i%s%9(B fault torrance$B!#(B
-  $BMWAG$N0lIt$,8N>c$7$F$$$F$b(B(partial failure)$B$G$bF0$-B3$1$k!#(B
-* $B9=@.MWAG$NA2?JE\*$JCV49(B incremental replacement of components$B!#(B
-  $B2u$l$?ItIJ$r* $B?M
+* フォールトトレランス fault torrance。
+  要素の一部が故障していても(partial failure)でも動き続ける。
+* 構成要素の漸進的な置換 incremental replacement of components。
+  壊れた部品を取り換える。
+  性能が足りなくなったら追加する。
+* 人手のかかる処理を分担。
+  例: DNS (Domain Name System)。
 
-### $B"!JB9T(B$B%W%m%0%i%\_%s%0(B$B!JJBNs!"J,;6!"$=$NB>!K$N6&DL$NOC(B
+### ◆並行プログラミング（並列、分散、その他）の共通の話
 
-* ($B%W%m%;%C%5(B$B$,J#?t(B) (multiple processors)
-* $B%W%m%;%9(B$B$,J#?t(B multiple processes
-* $B%W%m%;%9(B$B4V$N6(D4(B(coordination)$B$,I,MW!#F14|(B(synchronization)$B!"DL?.(B(communication)$B!#(B
-* $B;q8;3d$jEv$F(B(resource allocation)$B!"(B$B%9%1%8%e!<%j%s%0(B(scheduling )$B$,=EMW!#(B
+* (プロセッサが複数) (multiple processors)
+* プロセスが複数 multiple processes
+* プロセス間の協調(coordination)が必要。同期(synchronization)、通信(communication)。
+* 資源割り当て(resource allocation)、スケジューリング(scheduling )が重要。
 
-$BC10l(B$B%W%m%;%C%5(B$B$G$NJB9T(B$B%W%m%0%i%\_%s%0(B$B$b$"$k!#8e=R!#(B
+単一プロセッサでの並行プログラミングもある。後述。
 concurrent programming in a single processor.
 
-### $B"!JB9T(B$B%W%m%0%i%\_%s%0(B$B$GI,MW$J8@8l(B
+### ◆並行プログラミングで必要な言語
 
-$B#2$D$N8@8l$,I,MW(B
+２つの言語が必要
 
-$B7W;;8@8l(B computational languages
-:   $B8D!9$N3hF0$r5-=R(B
+計算言語 computational languages
+:   個々の活動を記述
 
     * C
     * Fortran
 
-$B6(D48@8l(B coordination languages
-:   $BE}0l$5$l$?(B$B%W%m%0%i%`(B$B$KAH$\_N)$F$k$?$a$N!V8R(B(glue)$B!W(B
+協調言語 coordination languages
+:   統一されたプログラムに組み立てるための「糊(glue)」
 
     * Linda
-    * ($BF14|!&DL?.%i%$%V%i%j(B)
+    * (同期・通信ライブラリ)
 
-Java $B$J$I!"#1$D$N8@8l$G7W;;$H6(D4$,=q$1$k$b$N$b$"$k!#(B
+Java など、１つの言語で計算と協調が書けるものもある。
 
-## $B"#Nr;K(B history
+## ■歴史 history
 
-$BNr;KE\*$K=EMW$J=PMh;v$HJB9T(B$B%W%m%0%i%\_%s%0(B$B$r3X$V0U5A!#(B
+歴史的に重要な出来事と並行プログラミングを学ぶ意義。
 
-$B9V5A$N:G8e$K$O!"$3$3$G8=$l$k(B$B%-!<%o!<%I(B$B$rM}2r$G$-$k$3$H$rL\I8$K$9$k!J:#(B
-$BF|$NCJ3,$G$OM}2r$G$-$J$$$b$N$,$"$C$F$b$h$$!K!#(B
+講義の最後には、ここで現れるキーワードを理解できることを目標にする（今
+日の段階では理解できないものがあってもよい）。
 
-### $B"!C`$B%W%m%0%i%\_%s%0(B$B$NH/L@(B invention of sequential programming
+### ◆逐次プログラミングの発明 invention of sequential programming
 
-$B%O!<%I%&%'%"(B$B$O!"K\
+ハードウェアは、本質的には並列。全部の素子が同時に動く。
 
-$B%W%m%0%i%`%+%&%s%?(B$B$NH/L@!#(B$B%W%m%0%i%`(B$BFbB"J}<0!#(B
-$B%N%$%^%s(B$B7?(B$B%3%s%T%e!<%?(B$B!#(B
+プログラムカウンタの発明。プログラム内蔵方式。
+ノイマン型コンピュータ。
 
-$BC`o$KFC
+逐次処理は非常に特殊
 
-* $BNr;KE\*$JET9g!#(B$B%O!<%I%&%'%"(B$B$,9b2A$@$C$?!#(B
-  $BJ#?t(B$B%3%s%T%e!<%?(B$B$r;H$&$N$OlTBt$9$.$k!#(B
-* **$BC`$B%W%m%0%i%`(B$B$N=q$-$d$9$5(B**$B!#@)8B$r$D$1$?J}$,$o$+$j$d$9$$!#(B
-  $B3XIt(B1$BG/@8$G$b(B$B%W%m%0%i%`(B$B$,$+$1$k!#(B
+* 歴史的な都合。ハードウェアが高価だった。
+  複数コンピュータを使うのは贅沢すぎる。
+* **逐次プログラムの書きやすさ**。制限をつけた方がわかりやすい。
+  学部1年生でもプログラムがかける。
 
-$BEv=i$N(B$B%3%s%T%e!<%?(B$B$K!"#O#S$O$J$$!#(B
+当初のコンピュータに、ＯＳはない。
 
-### $B"!(B$B%^%k%A%W%m%0%i%\_%s%0(B multiprogramming
+### ◆マルチプログラミング multiprogramming
 
-$B#1Bf$N(B$B%3%s%T%e!<%?(B$B$N(B$B%a%b%j(B$B$K!"F1;~$KJ#?t$N(B$B%W%m%0%i%`(B$B$r(B$B%m!<%I(B$B$7$F@Z$jBX(B
-$B$($J$,$iF0:n$5$;$k!#(B
+１台のコンピュータのメモリに、同時に複数のプログラムをロードして切り替
+えながら動作させる。
 
-$B%O!<%I%&%'%"(B$B$O!"9b$$!#(B
+ハードウェアは、高い。
 
-$B9b$$#C#P#U$rM-8z$K3hMQ$7$?$$!#(B
+高いＣＰＵを有効に活用したい。
 
-$B%P%C%A(B$B=hM}$NCB@8!#F~=PNO$H#C#P#U=hM}$r!VJBNs!WF0:n$5$;$k!#(B
+バッチ処理の誕生。入出力とＣＰＵ処理を「並列」動作させる。
 
-![$B#3$D$N%8%g%V$NC`<!=hM}!#3F%8%g%V$O!](./$BJB9T!&JBNs!&J,;6%W%m%0%i%_%s%0(B_concurrent,parallel,and distributed programming_files/batch-input-proc-output-seq.svg)
+![３つのジョブの逐次処理。各ジョブは、入力、処理、出力。](./並行・並列・分散プログラミング_concurrent,parallel,and distributed programming_files/batch-input-proc-output-seq.svg)
 
-**$B?^(B? 3$B$D$N(B$B%8%g%V(B$B$NC`**
-![$B%8%g%V$,#3$D!](./$BJB9T!&JBNs!&J,;6%W%m%0%i%_%s%0(B_concurrent,parallel,and distributed programming_files/batch-input-proc-output.svg)
+**図? 3つのジョブの逐次処理 (Executing three jobs sequentially)**
+![ジョブが３つ、入力、処理、出力、異なるものは重なってもよい。](./並行・並列・分散プログラミング_concurrent,parallel,and distributed programming_files/batch-input-proc-output.svg)
 
-**$B?^(B? $B%P%C%A(B$B=hM}$K$\*$1$k(B CPU $B$HF~=PNOAuCV$NJBNsF0:n(B (parallel processing of CPU and I/O in batch processeing)**
+**図? バッチ処理における CPU と入出力装置の並列動作 (parallel processing of CPU and I/O in batch processeing)**
 
-$B%W%m%;%9(B$B$N35G0$N3NN)!#(B$B%W%m%;%9(B$B$H(B$B%W%m%0%i%`(B$B$NJ,N%!#(B
-$B0lHL$N(B$B%W%m%0%i%\_%s%0(B$B$O!"C`
+プロセスの概念の確立。プロセスとプログラムの分離。
+一般のプログラミングは、逐次のまま。
 
-$B#O#S$@$1JB9T(B$B%W%m%0%i%\_%s%0(B
+ＯＳだけ並行プログラミング
 
-* $BFq$7$$JB9T(B$B%W%m%0%i%\_%s%0(B$B$r#O#S$KJD$89~$a$F!";D$j$O3Z$r$9$k!#(B
-* $B#O#S$O$,$s$P$C$F:n$k(B
+* 難しい並行プログラミングをＯＳに閉じ込めて、残りは楽をする。
+* ＯＳはがんばって作る
 
-$B:#$G$b#O#S$N652J=q$K$O!"(B$B%;%^%U%)(B$B$d(B$B%G%C%I%m%C%/(B$B$NOC$,=P$F$$$k!#(B
+今でもＯＳの教科書には、セマフォやデッドロックの話が出ている。
 
-Concurrent Pascal, Solo$B!#(B
+Concurrent Pascal, Solo。
 
-$B#O#S$N
+ＯＳの実装では、実際には、「割り込み禁止」という軽量の相互排除命令が多
+用された。
 
-### $B"!C10l(B$B%W%m%;%C%5(B(a single processor)
+### ◆単一プロセッサ(a single processor)
 
-$BC10l(B$B%W%m%;%C%5(B$B!#(B
-$B5;=QE\*$K3NN)$7$F$$$k!#(B
-![CPU$B!](./$BJB9T!&JBNs!&J,;6%W%m%0%i%_%s%0(B_concurrent,parallel,and distributed programming_files/single-processor.svg)
+単一プロセッサ。
+技術的に確立している。
+![CPU、メモリ、I/O、OS、アプリケーション](./並行・並列・分散プログラミング_concurrent,parallel,and distributed programming_files/single-processor.svg)
 
-**$B?^(B? $BC10l(B$B%W%m%;%C%5(B (a single processor system)**
+**図? 単一プロセッサ (a single processor system)**
 
-### $B"!(BUnix fork-exit-wait
+### ◆Unix fork-exit-wait
 
-$B%f!<%6%l%Y%k(B$B$NL?Na$NNc(B
+ユーザレベルの命令の例
 
 * fork()
 * exit()
@@ -192,504 +203,532 @@ Concurrent Pascal, Solo$B!#(B
 
 fork join model
 
-### $B"!(BTSS (Time sharing system)
+### ◆TSS (Time sharing system)
 
-Time sharing system$B!#(B
+Time sharing system。
 
-$B#1Bf$NCf1{$NBg7?(B$B%3%s%T%e!<%?(B(mainframe)$B$K!"J#?t$N!V!JJ8;z!KC
+１台の中央の大型コンピュータ(mainframe)に、複数の「（文字）端末
+(terminal)」を接続。
 
-$BC
+端末を使っている人からすると専有しているように見える。
 
-TSS $B$GJ#?t$N(B$B%"%W%j%1!<%7%g%s(B$B$rF1;~$KAv$i$;$k!#(B
-CPU $B$,5.=E$J;~Be!#(BCPU $B$rM7$P$;$J$$!#(B
+TSS で複数のアプリケーションを同時に走らせる。
+CPU が貴重な時代。CPU を遊ばせない。
 
-![$B%a%$%s%U%l!<%`#1Bf!](./$BJB9T!&JBNs!&J,;6%W%m%0%i%_%s%0(B_concurrent,parallel,and distributed programming_files/mainframe-terminals.png)
+![メインフレーム１台、端末ｎ台](./並行・並列・分散プログラミング_concurrent,parallel,and distributed programming_files/mainframe-terminals.png)
 
-**$B?^(B? $B%a%$%s%U%l!<%`(B$B$HC**
+**図? メインフレームと端末(a mainframe and terminals)**
 
-### $B"!(BVirtual Machine
+### ◆Virtual Machine
 
-$B#1Bf$N(B$B%a%$%s%U%l!<%`(B$B$K!"F1;~$KJ#?t$N#O#S$rAv$i$;$k$N$,;O$j!#(B
-TSS $B$N
+１台のメインフレームに、同時に複数のＯＳを走らせるのが始り。
+TSS の実装方法の１つでもあった。
 
-$B:G6a$O!"(B
-$B%3%s%T%e!<%?(B$B$N9bB.2=$G!"@-G=$,M>$C$F$-$?!#$b$H$b$H(B$B%O!<%I%&%'%"(B$B#nBf$G$d$C(B
-$B$F$$$?;E;v$r!"(B$B%O!<%I%&%'%"(B$B$H$7$F$O#1Bf$K=8Ls$9$k!#JBNs=hM}$N5U!#(B
+最近は、
+コンピュータの高速化で、性能が余ってきた。もともとハードウェアｎ台でやっ
+ていた仕事を、ハードウェアとしては１台に集約する。並列処理の逆。
 
-![$B?^(B? $B%5!<%P#3Bf!](./$BJB9T!&JBNs!&J,;6%W%m%0%i%_%s%0(B_concurrent,parallel,and distributed programming_files/virtual-machine-server-consolidation-before.png)$l#2$D(B">
+![図? サーバ３台、ＯＳ３種類、アプリケーションそれぞれ２つ](./並行・並列・分散プログラミング_concurrent,parallel,and distributed programming_files/virtual-machine-server-consolidation-before.png)
 
-**$B?^(B? $B2>A[7W;;5!$K$h$k(B$B%5!<%P(B$B$N=8Ls(B($B=8LsA0(B) (before server consolidation by virtual machines)**
-![$B?^(B? $B%O!<%I%&%'%](./$BJB9T!&JBNs!&J,;6%W%m%0%i%_%s%0(B_concurrent,parallel,and distributed programming_files/virtual-machine-server-consolidation-after.png)$l#2$D(B">
+**図? 仮想計算機によるサーバの集約(集約前) (before server consolidation by virtual machines)**
+![図? ハードウェア1台、ＯＳ３種類、アプリケーションそれぞれ２つ](./並行・並列・分散プログラミング_concurrent,parallel,and distributed programming_files/virtual-machine-server-consolidation-after.png)
 
-**$B?^(B? $B2>A[7W;;5!$K$h$k(B$B%5!<%P(B$B$N=8Ls(B($B=8Ls8e(B) (after server consolidation by virtual machines)**
+**図? 仮想計算機によるサーバの集約(集約後) (after server consolidation by virtual machines)**
 
-1999$BG/(BVMware Workstation $B0J9\_!"(B$B%Q%=%3%s(B$BMQ$N(B VM $B$b9-$/;H$o$l$k!#(B
+1999年VMware Workstation 以降、パソコン用の VM も広く使われる。
 
-### $B"!(B$B%G!<%?%Y!<%9(B(database)
+### ◆データベース(database)
 
-$B%W%m%0%i%`(B$B$H(B$B%G!<%?(B$B$rJ,N%!#(B$B%G!<%?(B$B$rJ#?t$N(B$B%W%m%0%i%`(B$B$G6&M-(B(share)$B!#(B
-$B%G!<%?(B$B$rCf?4$K9M$($k!#(B
-$B%G!<%?(B$B$K(B integrity $B$r;}$?$;$k!#(B
-integrity $B$rK~$?$7$?(B$B%G!<%?(B$B$@$1$r!"$-$A$s$H(B
-$B1JB3E\*(B(persistent)$B$KJ]B8$9$k!#(B
+プログラムとデータを分離。データを複数のプログラムで共有(share)。
+データを中心に考える。
+データに integrity を持たせる。
+integrity を満たしたデータだけを、きちんと
+永続的(persistent)に保存する。
 
-### $B"!(B$B%H%i%s%6%/%7%g%s(B(transaction)
+### ◆トランザクション(transaction)
 
-$BJ#?t$N(B$B%G!<%?%Y!<%9(B$B$X$NLd$$9g$o$;!J8!:w!"99?7!K$r!"$G$-$k$@$1!VJB9T(B
-(concurrent)$B!W$K
+複数のデータベースへの問い合わせ（検索、更新）を、できるだけ「並行
+(concurrent)」に実行する。
+効率のため。
 
-$B:G=\*7k2L$O!"#1$D$R$H$DC`
+最終結果は、１つひとつ逐次的(sequential)にやったものと同じ。
+serializability。
+integrity を満たす。
 
-### $B"!(BLocal Area Network$B$H(Bworkstation
+### ◆Local Area Networkとworkstation
 
-Sun Workstation$B!#(B
+Sun Workstation。
 
-$B;q8;$r6&M-$7$?$$!#(B$B%W%j%s%?(B$B!#(B$B%G%#%9%/(B$B!#(B
+資源を共有したい。プリンタ。ディスク。
 
-$B%G%#%9%/%l%9!&%o!<%/%9%F!<%7%g%s(B$B!#(B
+ディスクレス・ワークステーション。
 
-Socket API$B!"(BX Window$B!"(B
-NFS, NIS, RPC $B=P8=!#(B
+Socket API、X Window、
+NFS, NIS, RPC 出現。
 
-### $B"!(BSocket API
+### ◆Socket API
 
-$B$b$H$b$H(B Unix 4.2 BSD $BMQ!#(B
-socket(), listen(), accept(), connect(), send(), recv(), select()$B!#(B
+もともと Unix 4.2 BSD 用。
+socket(), listen(), accept(), connect(), send(), recv(), select()。
 
-$BJ#?t$NDL?.(B$B%W%m%H%3%k(B(TCP/IP$B0J30$b(B)$B$r07$($k!#(B
+複数の通信プロトコル(TCP/IP以外も)を扱える。
 
-### $B"!(BX Window
+### ◆X Window
 
-X Window$B!#(B$B%&%$%s%I%&(B$B$N(B$B%W%m%0%i%\_%s%0(B$B$O!"K\$B%/%i%$%"%s%H!&%5!<%P!&%b%G%k(B(client server model)$B$K4p$E$/!#(B
-$B$?$@$7!"8e$K!"(B$B%b%G%k(B$B$rJQ99$7$?!#(B
-$B%5!<%P(B$B$+$i(B$B%/%i%$%"%s%H(B$B$X$N(B$B%$%Y%s%H(B(events)$B$NAw?.$rIU$1$?!#(B
-$B%j%9%J!&%Q%?%s(B(listener pattern)$B$X$HH/E8!#(B
+X Window。ウインドウのプログラミングは、本質的に並行(inherently concurrent)。
+X Windowの実装は、クライアント・サーバ・モデル(client server model)に基づく。
+ただし、後に、モデルを変更した。
+サーバからクライアントへのイベント(events)の送信を付けた。
+リスナ・パタン(listener pattern)へと発展。
 
-### $B"!(BRemote Procedure Call(RPC)
+### ◆Remote Procedure Call(RPC)
 
-$B1s3V$B%W%m%;%9(B$B4VDL?.(B(interprocess communication)$B$@$,!"0l8+!"(B
-$B
+遠隔手続呼出し。プロセス間通信(interprocess communication)だが、一見、
+手続き呼び出し(procedure calls)に見える。
 
-RPC $B$O!"(BNFS (Network File System) $B$N$B%5!<%P(B$B!"(B
-$BA43X7W;;5!(B icho01, icho02, kiri $B$G!"(B
-$B$I$N(B$B%3%s%T%e!<%?(B$B$r;H$C$F$b!"<+J,$N(B$B%[!<%`%G%#%l%/%H(B$B$,8+$($k$N$O!"(BNFS $B$r(B
-$B;H$C$F$$$k!#(B
+RPC は、NFS (Network File System) の実装で使われている。
+coins Linux azalea PC や violet サーバ、
+全学計算機 icho01, icho02, kiri で、
+どのコンピュータを使っても、自分のホームディレクトが見えるのは、NFS を
+使っている。
 
-NFS $B$N$?$a$K(B UID (user id) $B$H(B$B%Q%9%o!<%I(B$B$r6&M-$9$k$?$a$K;H$o$l$?$N$,(B
-NIS (Network Information System)$B!#(B
+NFS のために UID (user id) とパスワードを共有するために使われたのが
+NIS (Network Information System)。
 
-### $B"!JB9T(B$B%W%m%0%i%\_%s%0(B$B8@8l(B
+### ◆並行プログラミング言語
 
-* $B%Z%H%j%M%C%H(B Petri Net
+* ペトリネット Petri Net
 * CSP (Communicating Sequential Processes)
 * Actors
-* Concurrent Pascal, Distributed Processes($B8@8l$NL>A0(B)
+* Concurrent Pascal, Distributed Processes(言語の名前)
 * Ada
 * PLITS, Synchronizing Resources, Cell
 * Argus
 
-### $B"!(BAda
+### ◆Ada
 
-Ada$B!#(B$B%"%a%j%+(B$B9qKI>J(B(US DoD, Department of Defence)
-$B$G;EMM$r7h$a$?AH$\_9~$\_(B$B%7%9%F%`(B(embedded systems)$BMQ$N(B
-$B%W%m%0%i%\_%s%0(B$B8@8l!#(B
+Ada。アメリカ国防省(US DoD, Department of Defence)
+で仕様を決めた組み込みシステム(embedded systems)用の
+プログラミング言語。
 
-* $B;EMM(B(specification)$B!J(B$B%$%s%?%U%'!<%9(B(interface)$B!K$H* $B%W%m%;%9(B$B@8@.(B
-  * $B%i%s%G%V(B(rendezvous)$B$K$h$k(B$B%W%m%;%9(B$B4VDL?.(B
+* 仕様(specification)（インタフェース(interface)）と実現(implementation)の分離
+* プロセス生成
+* ランデブ(rendezvous)によるプロセス間通信
 
-### $B"!(B$B%W%m%0%i%\_%s%0(B$B8@8l$,Ds6!$9$k35G0(B
+### ◆プログラミング言語が提供する概念
 
-$BJB9T$B%,!<%I(B$BIU$-(B$B%3%^%s%I(B(guarded commands)$B!#(B
+並行実行(concurrent execution)。同期(synchronization)。非決定性
+(non-determinism)。ガード付きコマンド(guarded commands)。
 
-$BE/3XCHq$B%P%C%U%!(B$BLdBj(B(bounded buffers)$B!#(B$B%G%C%I(B
-$B%m%C%/(B(deadlock)$B!#(B
+哲学者の食事問題(dining philosophers problem)。生産者消費者問題
+(producer-consumer problem)／有限バッファ問題(bounded buffers)。デッド
+ロック(deadlock)。
 
-$B=i4|$N$B%3%k!<%A%s(B(coroutine)$B!#(B
+初期の実装は、全部コルーチン(coroutine)。
 
-### $B"!(B$B%\*%V%8%'%/%H(B$B;X8~(B$B%W%m%0%i%\_%s%0(B(object oriented programming)
+### ◆オブジェクト指向プログラミング(object oriented programming)
 
-$B%W%m%0%i%`(B$B$r(B$B%\*%V%8%'%/%H(B(objects)$B$N=89g$G=q$/!#(B
-$B%\*%V%8%'%/%H(B$B$O!"?M4V$N$h$&$K!"<+N'(B(autonomous, autonomic)$B$7$F$$$k!#(B
-$B%\*%V%8%'%/%H(B$B$NFbIt$N(B$B%G!<%?(B$B$O30$+$i?($l$J$$!#(B$B%G!<%?%Y!<%9(B$B$N5U!#(B
-$B%\*%V%8%'%/%H(B$B$NFbIt$r(B$B%"%/%;%9(B$B$9$k$K$O!"(B$B%a%C%;!<%8(B(message)$B$rAw$k$7$+$J$$!#(B
+プログラムをオブジェクト(objects)の集合で書く。
+オブジェクトは、人間のように、自律(autonomous, autonomic)している。
+オブジェクトの内部のデータは外から触れない。データベースの逆。
+オブジェクトの内部をアクセスするには、メッセージ(message)を送るしかない。
 
-$B%\*%V%8%'%/%H(B$B;X8~(B$B%W%m%0%i%\_%s%0(B$B$O!"K\$B%W%m%0%i%\_%s%0(B$B!#(B
-$B
+オブジェクト指向プログラミングは、本質的には並行プログラミング。
+実際問題は単に手続き呼出しの実装が多い。
 
 obj1.method1();
 
 Smalltalk 80
 
-$B%\*%V%8%'%/%H(B$B;X8~(B$B%G!<%?%Y!<%9(B(object-oriented databases)$B$NL7=b!#(B
+オブジェクト指向データベース(object-oriented databases)の矛盾。
 
-### $B"!(BORB
+### ◆ORB
 
-Object Request Broker$B!#J#?t$N8@8l$r7R$.$?$$!#(B
-$B%\*%V%8%'%/%H(B$B;X8~$,F~$C$?(B RPC $B!#(B
+Object Request Broker。複数の言語を繋ぎたい。
+オブジェクト指向が入った RPC 。
 
-### $B"!DL?.(B$B%i%$%V%i%j(B(Communication Library)
+### ◆通信ライブラリ(Communication Library)
 
 * PVM, Parallel Virtual Machine
 * MPI, Message Passing Interface
 
-### $B"!(B$B%Q%=%3%s(B(Personal Computers)
+### ◆パソコン(Personal Computers)
 
-$BHf3SE\*?7$7$$!#(B
+比較的新しい。
 
-### $B"!(BCP/M (Control Program for Microcomputers)
+### ◆CP/M (Control Program for Microcomputers)
 
-$B%Q%=%3%s(B$BMQ$N!J(B$B%U%m%C%T(B$B!&!K(B$B%G%#%9%/(B$B#O#S!J(B(floppy)Disk Operating System$B!K!#(B
-$B0lEY$K#1$D$@$1(B$B%W%m%0%i%`(B$B$,F0$/!#(B
-$B%-!<%\!<%I(B$BF~=PNO!"(B$B%U%m%C%T!&%G%#%9%/(B$B$N#D#M#AE>Aw40N;$K$O3d$j9~$\_$r;H$&!#(B
+パソコン用の（フロッピ・）ディスクＯＳ（(floppy)Disk Operating System）。
+一度に１つだけプログラムが動く。
+キーボード入出力、フロッピ・ディスクのＤＭＡ転送完了には割り込みを使う。
 
-### $B"!(BMacintosh Multi-finder
+### ◆Macintosh Multi-finder
 
-$B!V(B$B%Q%=%3%s(B$B$G!W!"0lEY$KJ#?t$N(B$B%W%m%0%i%`(B$B$r@Z$jBX$($J$,$i;H$($k!#(B
+「パソコンで」、一度に複数のプログラムを切り替えながら使える。
 
-### $B"!(BMS-DOS
+### ◆MS-DOS
 
-CP/M $B$K!"(BUnix $BE\*$J5!G=$rF~$l$?!#(B
+CP/M に、Unix 的な機能を入れた。
 
-1. $B3,AX2=(B$B%G%#%l%/%H%j(B(hierarchical directories)$B!#(Bmkdir, chdir
-2. $B;R(B$B%W%m%;%9(B$B$O:n$l$k(B(child processes)$B!#!J<+J,$O;\_$^$k!#!K(B
+1. 階層化ディレクトリ(hierarchical directories)。mkdir, chdir
+2. 子プロセスは作れる(child processes)。（自分は止まる。）
 
-### $B"!(BMS Windows
+### ◆MS Windows
 
-$B!V(B$B%Q%=%3%s(B$B$G!W!"J#?t$N(B$B%W%m%0%i%`(B$B$rF1;~$KF0$+$7$F$b!"$&$^$/F0$/$h$&$K$J$C(B
-$B$?!#(B
+「パソコンで」、複数のプログラムを同時に動かしても、うまく動くようになっ
+た。
 
-MS Windows 95 $B$O!"FbItE\*$K$O!"(BCOM/OLE $B$H8F$P$l$k(B ORB $B$N8G$^$j$G:n$i$l(B
-$B$F$$$k!#(B
+MS Windows 95 は、内部的には、COM/OLE と呼ばれる ORB の固まりで作られ
+ている。
 
-$B%Q%=%3%s(B$B$G$O!"J]8n$N35G0$,4uGv!#(B
+パソコンでは、保護の概念が希薄。
 
-### $B"!(B$B%^%k%A%W%m%;%C%5(B(a multi processor)
+### ◆マルチプロセッサ(a multi processor)
 
-[$BC10l(B$B%W%m%;%C%5(B$B$G(B](https://www.cs.tsukuba.ac.jp/~yas/cs/csys-2023/2023-04-14/index.html#single-processor-computer) CPU $B$rA}$d$9!#(B
-![CPUx3$B8D!](./$BJB9T!&JBNs!&J,;6%W%m%0%i%_%s%0(B_concurrent,parallel,and distributed programming_files/multi-processor.svg)
+[単一プロセッサで](https://www.cs.tsukuba.ac.jp/~yas/cs/csys-2023/2023-04-14/index.html#single-processor-computer) CPU を増やす。
+![CPUx3個、メモリ、I/O、OS、アプリケーション](./並行・並列・分散プログラミング_concurrent,parallel,and distributed programming_files/multi-processor.svg)
 
-**$B?^(B? $B%^%k%A%W%m%;%C%5(B (a mult-processor)**
+**図? マルチプロセッサ (a mult-processor)**
 
-### $B"!(BIntel Hyperthreading
+### ◆Intel Hyperthreading
 
-CPU$B$N(B$B%W%m%0%i%`!&%+%&%s%?(B$B2s$j$@$1A}$d$7$?$b$N!#(B
+CPUのプログラム・カウンタ回りだけ増やしたもの。
 
-### $B"!(BMulti-core
+### ◆Multi-core
 
-$B#1$D$N(B$B%A%C%W(B$B$K!"J#?t$N(B CPU $B$r:\$;$k!#(B
+１つのチップに、複数の CPU を載せる。
 
-$B:#$NCJ3,$G$O!"C1$K!"(BCPU 2 $B8D$"$k$b$N$r(B 1 $B8D$K$^$H$a$?$h$&$J$b$N!#(B
-$B@N$N(B SMP $B!]!d(B UMA $B$N:F8=!#(B$B%3%"(B$B?t!"(B$B%A%C%W(B$B?t$,A}$($k$K=>$$!"(B
-$BIT6Q
+今の段階では、単に、CPU 2 個あるものを 1 個にまとめたようなもの。
+昔の SMP −＞ UMA の再現。コア数、チップ数が増えるに従い、
+不均質になる。
 
-### $B"!(BInternet
+### ◆Internet
 
-TCP/IP$B$N#4AX(B$B%b%G%k(B$B!#(B
-OSI $B$N#7AX(B$B%b%G%k(B(seven layer model)$B$h$j8E$$!#(B
+TCP/IPの４層モデル。
+OSI の７層モデル(seven layer model)より古い。
 
-$B%/%i%$%"%s%H!&%5!<%P!&%b%G%k(B(client server model)$B!#(B
+クライアント・サーバ・モデル(client server model)。
 
-inetd (Internet daemon)$B!#(B
+inetd (Internet daemon)。
 
-### $B"!(BUUCP (Unix-to-Unix Copy)
+### ◆UUCP (Unix-to-Unix Copy)
 
-$BIOK3?M$N(B Internet$B!#(Bpoor man's Internet
+貧乏人の Internet。poor man's Internet
 
-$B:#$NMQ8l$@$H(B$B%b%G%`(B(modem)$B$K$h$k(B$B%@%$%d%k%"%C%W(B(dial up)$B@\B3$rMQ$$$?(B
-peer-to-peer (P2P) $B7?$N(B$B%U%!%$%k(B$BE>Aw(B(file transfer)$B!#(B
-$BEE;R(B$B%a!<%k(B(email)$B$H(B$B%M%C%H%K%e!<%9(B(netnews, Usenet)$B$N5-;v$r1?$V!#(B
+今の用語だとモデム(modem)によるダイヤルアップ(dial up)接続を用いた
+peer-to-peer (P2P) 型のファイル転送(file transfer)。
+電子メール(email)とネットニュース(netnews, Usenet)の記事を運ぶ。
 
-$B%K%e!<%9%7%9%F%`(B(news system)$B$N;EAH$\_$O!"J,;6(B$B%7%9%F%`(B$B$NM%$l$?Nc$K$J$C$F$$$k!#(B
+ニュースシステム(news system)の仕組みは、分散システムの優れた例になっている。
 
-### $B"!(Bftp
+### ◆ftp
 
-$B%=%U%H(B$B$NG[I[$HO@J8Ej9F!#(B
-anonymous ftp$B!#(Barchie.
-$BLkCf$KAv$i$;$k$N$,Ni57!#(B
+ソフトの配布と論文投稿。
+anonymous ftp。archie.
+夜中に走らせるのが礼儀。
 
-### $B"!(BWorld Wide Web
+### ◆World Wide Web
 
-$BJ8;z$?$1$G$J$/!"3($,=P$k!#(B$B%X%k%Q!<(B$B$G2;$b=P$k!#(B
+文字たけでなく、絵が出る。ヘルパーで音も出る。
 
-$B%/%i%$%"%s%H!&%5!<%P!&%b%G%k(B(client server model)$B!#(B
-$B%P%C%A(B$B=hM}Iw(B(batch processing like)$B!#(B
+クライアント・サーバ・モデル(client server model)。
+バッチ処理風(batch processing like)。
 
-### $B"!(BCGI
+### ◆CGI
 
-Common Gateway Interface$B!#(B
+Common Gateway Interface。
 
-$B:G6a$G$O!"B?$/$N?M$,!"(BCGI $B$G$O$8$a$FJB9T(B$B%W%m%0%i%\_%s%0(B$B$K=P2q$&!#(B
+最近では、多くの人が、CGI ではじめて並行プログラミングに出会う。
 
-$B%m%C%/(B$B$7$J$$$H(B$B%@%a(B$B!#(B$B%G%C%I%m%C%/(B$B$,5/$jF@$k!#(B
+ロックしないとダメ。デッドロックが起り得る。
 
-### $B"!(BJava Applet
+### ◆Java Applet
 
-Web$B%V%i%&%6(B$B$G!"(B$B%"%K%a!<%7%g%s(B$B$r9T$&$?$a$KEP>l!#(B
+Webブラウザで、アニメーションを行うために登場。
 
-### $B"!(BJava Servlet
+### ◆Java Servlet
 
-$B=E$?$$(B fork() $B$rHr$1$k!#(B
+重たい fork() を避ける。
 
-### $B"!(BXML Web Service
+### ◆XML Web Service
 
-ORB $B$N
+ORB の次の世代の RPC。
 
-HTML$B!#(BXML$B!#(BHTTP$B!#(BSOAP$B!#(B
+HTML。XML。HTTP。SOAP。
 
-### $B"!(BRepresentational state transfer (REST)
+### ◆Representational state transfer (REST)
 
-XML Web Service $B$N
+XML Web Service の次の世代の RPC。
 
-### $B"!(BP2P
+### ◆P2P
 
-Peer-to-peer $B!#(B
+Peer-to-peer 。
 
-$B%/%i%$%"%s%H!&%5!<%P(B$B$N0U5A$,Bg;v!#(B
-$B%/%i%$%"%s%H!&%5!<%P(B$B$,8=$l$kA0$N>u67$KLa$C$F$O$$$1$J$$!#(B
+クライアント・サーバの意義が大事。
+クライアント・サーバが現れる前の状況に戻ってはいけない。
 
-Single Point of Failure $B$rHr$1$k$H$$$&9M$(J}$O$h$$!#(B
+Single Point of Failure を避けるという考え方はよい。
 
-### $B"!(B$B%/%i%&%I!&%3%s%T%e!<%F%#%s%0(B(cloud computing)
+### ◆クラウド・コンピューティング(cloud computing)
 
-* $B%G!<%?%;%s%?!<(B(data centers)$B$K;q8;$r=8Cf$5$;$k(B
-* $BJ#?t4k6H$G;q8;$r6&M-$9$k!#(B
+* データセンター(data centers)に資源を集中させる
+* 複数企業で資源を共有する。
 
-[$B%a%$%s%U%l!<%`(B$B$K$h$k(BTSS](https://www.cs.tsukuba.ac.jp/~yas/cs/csys-2023/2023-04-14/index.html#tss)$B$N:FMh$H$b8@$($k!#(B
+[メインフレームによるTSS](https://www.cs.tsukuba.ac.jp/~yas/cs/csys-2023/2023-04-14/index.html#tss)の再来とも言える。
 
-## $B"#(B$B%O!<%I%&%'%"(B / hardware
+## ■ハードウェア / hardware
 
-### $B"!(B$B%7%s%0%k%W%m%;%C%5(B$B$H=8Cf7?(B$B%7%9%F%`(B / single processors and centralized systems
+### ◆シングルプロセッサと集中型システム / single processors and centralized systems
 
-$B%7%s%0%k%W%m%;%C%5(B$B$O!"#1Bf$N(B$B%3%s%T%e!<%?(B$B$K(B$B%W%m%;%C%5(B$B$,(B CPU $B$,(B 1 $B$D!"%a(B
-$B%b%j(B$B$b(B 1$B$D!#(B
+シングルプロセッサは、１台のコンピュータにプロセッサが CPU が 1 つ、メ
+モリも 1つ。
 
-$B%M%C%H%o!<%/(B$B$G@\B3$5$l$?J#?t$N(B$B%3%s%T%e!<%?(B(multiple computers that are
-connected with a network)$B$+$i9=@.$5$l$kJ,;6(B$B%7%9%F%`(B(distributed
-systems)$B$HBPHf$9$k;~$K$O!"=8Cf7?(B$B%7%9%F%`(B(centralized systems))$B$H8F$P$l(B
-$B$k!#(B
+ネットワークで接続された複数のコンピュータ(multiple computers that are
+connected with a network)から構成される分散システム(distributed
+systems)と対比する時には、集中型システム(centralized systems))と呼ばれ
+る。
 
-$B5;=QE\*$K3NN)$7$F$$$k!#(B
+技術的に確立している。
 
-![CPU$B!](./$BJB9T!&JBNs!&J,;6%W%m%0%i%_%s%0(B_concurrent,parallel,and distributed programming_files/single-processor.svg)
+![CPU、メモリ、I/O、OS、アプリケーション](./並行・並列・分散プログラミング_concurrent,parallel,and distributed programming_files/single-processor.svg)
 
-**$B?^(B? $BC10l(B$B%W%m%;%C%5(B (a single processor system)**
+**図? 単一プロセッサ (a single processor system)**
 
-### $B"!JBNs(B$B%3%s%T%e!<%?(B(parallel computers)
+### ◆並列コンピュータ(parallel computers)
 
-Flynn $B$NJ,N`(B (Flynn's taxonomy)
+Flynn の分類 (Flynn's taxonomy)
 
 * SISD, Single Instruction, Single Data
 * SIMD, Single Instruction, Multiple Data
 * MISD, Multiple Instruction, Single Data
 * MIMD, Multiple Instruction, Multiple Data
 
-MIMD $B$NJ,N`(B
+MIMD の分類
 
-* $B6&M-(B$B%a%b%j(B$B$,$"$k(B(with shared memory)
-* $B6&M-(B$B%a%b%j(B$B$,$J$$(B(without shared memory)
+* 共有メモリがある(with shared memory)
+* 共有メモリがない(without shared memory)
 
-Mach$B%7%9%F%`(B$B$G$NJ,N`(B ( Mach operating system kernel, Mach microkernel )
+Machシステムでの分類 ( Mach operating system kernel, Mach microkernel )
 
-* $B6&M-(B$B%a%b%j(B$B$,$"$k(B(with shared memory)
-  + $B%"%/%;%9$,6Q+ $B%"%/%;%9$,IT6Q
-* $B6&M-(B$B%a%b%j(B$B$,$J$$(B: NORMA (No-Remote Memory Access)$B!#(B
+* 共有メモリがある(with shared memory)
+  + アクセスが均質: UMA (Uniform Memory Access), SMP (Symmetric Multiprocessor)
+  + アクセスが不均質(100倍くらい): NUMA (Non-uniform Memory Access)
+* 共有メモリがない: NORMA (No-Remote Memory Access)。
 
-### $B"!6&M-(B$B%a%b%j(B$B7?(B$B%^%k%A%W%m%;%C%5(B$B!"(BSMP (Shared memory multiprocessor)
+### ◆共有メモリ型マルチプロセッサ、SMP (Shared memory multiprocessor)
 
-![(CPU+Cache)*n+$B%a(B
-$B%b%j(B](./$BJB9T!&JBNs!&J,;6%W%m%0%i%_%s%0(B_concurrent,parallel,and distributed programming_files/shared-memory-multiprocesor.png)
+![(CPU+Cache)*n+メ
+モリ](./並行・並列・分散プログラミング_concurrent,parallel,and distributed programming_files/shared-memory-multiprocesor.png)
 
-**$B?^(B? $B6&M-(B$B%a%b%j(B$B7?(B$B%^%k%A%W%m%;%C%5(B($B%P%9(B$B6&M-(B) (Shared memory multiprocessor (with a shared bus))**
+**図? 共有メモリ型マルチプロセッサ(バス共有) (Shared memory multiprocessor (with a shared bus))**
 
-* Symmetric multiprocessor (SMP)$B$H$b8@$&!#(B$B%a%b%j(B$B$X$N(B$B%"%/%;%9(B$B;~4V$,$I$N>l=j$bBP>NE\*$G6Q* $BJ,;6(B$B%7%9%F%`(B$B$K$OJ,N`$7$J$$$N$,IaDL!#(B
-    $B=8Cf(B$B%7%9%F%`(B$B$N(B$B%W%m%0%i%`(B$B$,$=$N$^$^F0:n$9$k$N$G!#(B
-  * $B%-%c%C%7%e(B$B$N?FOB@-(B(cache affinity)$B$^$G9M$($k$HJ,;6E\*$J5;=Q$,$$$k!#(B
-    $B%a%b%j(B$B$N@09g@-(B(memory consistency)$B$^$G9M$($k$H!"K\Ev$O$+$J$jFq$7$$!#(B
-  * $B%^%k%A%3%"(BCPU (multi-core CPU)$B$O!"C1BN$G(BSMP$BJ,N`$5$l$k!#Nr;KE\*$K$O8E$$!#(B
+* Symmetric multiprocessor (SMP)とも言う。メモリへのアクセス時間がどの場所も対称的で均質(symmetric)。
+* 分散システムには分類しないのが普通。
+  集中システムのプログラムがそのまま動作するので。
+* キャッシュの親和性(cache affinity)まで考えると分散的な技術がいる。
+  メモリの整合性(memory consistency)まで考えると、本当はかなり難しい。
+* マルチコアCPU (multi-core CPU)は、単体でSMP分類される。歴史的には古い。
 
-### $B"!(B$B%/%m%9%P!<%9%$%C%A(B(crossbar switch)
+### ◆クロスバースイッチ(crossbar switch)
 
-![n*CPU-n*Memory](./$BJB9T!&JBNs!&J,;6%W%m%0%i%_%s%0(B_concurrent,parallel,and distributed programming_files/crossbar-switch-multiprocesor.png)
+![n*CPU-n*Memory](./並行・並列・分散プログラミング_concurrent,parallel,and distributed programming_files/crossbar-switch-multiprocesor.png)
 
-**$B?^(B? $B6&M-(B$B%a%b%j(B$B7?(B$B%^%k%A%W%m%;%C%5(B($B%/%m%9%P!<%9%$%C%A(B) (shared memory multiprocessor with a crossbar switch)**
-$BJ#?t$N(BCPU$B$,JL$N(B$B%a%b%j(B$B$KF1;~$K(B$B%"%/%;%9(B$B$G$-$k!#(B
-$BF1$8(B$B%a%b%j(B$B$J$i(B$B%P%9(B$B$HF1MM$K>WFM$9$k!#(B
+**図? 共有メモリ型マルチプロセッサ(クロスバースイッチ) (shared memory multiprocessor with a crossbar switch)**
+複数のCPUが別のメモリに同時にアクセスできる。
+同じメモリならバスと同様に衝突する。
 
-### $B"!Hs6Q$B%a%b%j(B$B7?(B$B%^%k%A%W%m%;%C%5(B(shared memory multiprocessor with non-uniform memory access)
+### ◆非均質共有メモリ型マルチプロセッサ(shared memory multiprocessor with non-uniform memory access)
 
-![CPU$B!](./$BJB9T!&JBNs!&J,;6%W%m%0%i%_%s%0(B_concurrent,parallel,and distributed programming_files/non-uniform-memory-access.png)
+![CPU、メモリ、相互結合ネットワーク](./並行・並列・分散プログラミング_concurrent,parallel,and distributed programming_files/non-uniform-memory-access.png)
 
-**$B?^(B? $BHs6Q$B%a%b%j(B$B7?(B$B%^%k%A%W%m%;%C%5(B (shared memory multiprocessor with non-uniform memory access)**
-$BAj8\_7k9g(B$B%M%C%H%o!<%/(B$B$G!"1s3V$N(B$B%a%b%j(B$B$r(B CPU $B$+$iD>@\(B$B%"%I%l%9(B$B$G(B$B%"%/%;%9(B
-$B$G$-$k!#$?$@$7!"B.EY$O(B 100 $BG\$/$i$$CY$$!#(B
+**図? 非均質共有メモリ型マルチプロセッサ (shared memory multiprocessor with non-uniform memory access)**
+相互結合ネットワークで、遠隔のメモリを CPU から直接アドレスでアクセス
+できる。ただし、速度は 100 倍くらい遅い。
 
-### $B"!(BLAN$B$K@\B3$5$l$?(B$B%3%s%T%e!<%?(B$B72(B(multiple computers connected to a LAN)
+### ◆LANに接続されたコンピュータ群(multiple computers connected to a LAN)
 
-![PC*3--hub](./$BJB9T!&JBNs!&J,;6%W%m%0%i%_%s%0(B_concurrent,parallel,and distributed programming_files/pc-swiching-hub.png)
+![PC*3--hub](./並行・並列・分散プログラミング_concurrent,parallel,and distributed programming_files/pc-swiching-hub.png)
 
-**$B?^(B? LAN$B$K@\B3$5$l$?(BPC**
-[NORMA](https://www.cs.tsukuba.ac.jp/~yas/cs/csys-2023/2023-04-14/index.html#norma)$B$N0l$B"!(B$B%H!<%i%9(B Torus
-![3x4 2d torus](./$BJB9T!&JBNs!&J,;6%W%m%0%i%_%s%0(B_concurrent,parallel,and distributed programming_files/torus-2d.png)
+**図? LANに接続されたPC**
+[NORMA](https://www.cs.tsukuba.ac.jp/~yas/cs/csys-2023/2023-04-14/index.html#norma)の一種。
+機種が違う(heterogeneous)こともある。
 
-**$B?^(B? 2$B$B%H!<%i%9(B**
-$B3J;R>u$@$,!"C<$,H?BPB&$H$D$J$,$C$F$$$k!#(B
-$B@$$NCf!"(B3$B$B%H!<%i%9(B$B$NG[@~$O4JC1!#(B
+### ◆トーラス Torus
 
-3$Be$N(B$B%H!<%i%9(B$B$b2DG=$@$,!"G[@~$,BgJQ$K$J$k!#(B
+![3x4 2d torus](./並行・並列・分散プログラミング_concurrent,parallel,and distributed programming_files/torus-2d.png)
 
-### $B"!(B$B%O%$%Q!<%-%e!<%V(B Hypercube
+**図? 2次元トーラス**
+格子状だが、端が反対側とつながっている。
+世の中、3次元なので、2次元トーラスの配線は簡単。
 
-![$B%O%$%Q!<%-%e!<%V(B(1$B<!85(B-4$B<!85(B)](./$BJB9T!&JBNs!&J,;6%W%m%0%i%_%s%0(B_concurrent,parallel,and distributed programming_files/hypercube.svg)
+3次元以上のトーラスも可能だが、配線が大変になる。
 
-**$B?^(B? $B%O%$%Q!<%-%e!<%V(B(1$B**
-2$B$B%H!<%i%9(B$B$h$j$b!"(B$B%N!<%I(B$B4V$N(B$B%[%C%W(B$B?t$,>/$J$$!#(B
+### ◆ハイパーキューブ Hypercube
 
-$BG[@~$,BgJQ$K$J$k!#(B
+![ハイパーキューブ(1次元-4次元)](./並行・並列・分散プログラミング_concurrent,parallel,and distributed programming_files/hypercube.svg)
 
-## $B"#3d$j9~$\_(B(interrupt)
+**図? ハイパーキューブ(1次元-4次元)**
+2次元トーラスよりも、ノード間のホップ数が少ない。
 
-$B%^%k%A%W%m%;%C%5$G$O$J$$!"C10l(BCPU$B$N%7%9%F%`$G!"8zN(E\*$KJB9T%W%m%0%i%`(B
-$B$r5-=R$9$k$?$a$N;EAH$\_!#(B
-CPU $B$H<~JUAuCV$NJBNs=hM}$K;H$&!#(B
-$B%O!<%I%&%'%"$ND>@\E\*$J%5%]!<%H$,$"$k!#(B
+配線が大変になる。
 
-$B3d$j9~$\_$N%W%m%0%i%\_%s%0$O!"Hs>o$KFq$7$$!#%G%P%C%,$,;H$($J$$!#(B
-printf() $B$b$D$+$($J$$!#(B
+## ■割り込み(interrupt)
 
-$B$?$@$7!"JB9T@-$N5-=R$K$D$$$F$O!"%9%l%C%I$N%G%C%I%m%C%/$h$j$O!">l9g$K$h$C(B
-$B$F$O4JC1$+$b$7$l$J$$!#(B
+マルチプロセッサではない、単一CPUのシステムで、効率的に並行プログラム
+を記述するための仕組み。
+CPU と周辺装置の並列処理に使う。
+ハードウェアの直接的なサポートがある。
 
-$B$b$H$b$H%9%l%C%I$N%W%m%0%i%`$r3d$j9~$\_$N%W%m%0%i%`$K=q$-49$($k$N$O(B
-$BFq$7$$!#(B
+割り込みのプログラミングは、非常に難しい。デバッガが使えない。
+printf() もつかえない。
 
-### $B"!<~JUAuCV(B(peripheral devices)
+ただし、並行性の記述については、スレッドのデッドロックよりは、場合によっ
+ては簡単かもしれない。
 
-$BF~=PNOAuCV(B($B%G%P%$%9(B)$B!"%G%P%$%9(B(device)
-$B$H$O!"%3%s%T%e!<%?$NH"$NCf$KFbB"$5$l$F$$$k%O!<%I%&%'%"$NItIJ$d%1!<%V%k(B
-$B$G30$G@\B3$9$kItIJ!#(B
-$BIaDL$O!"(BCPU $B$H%a%b%j0J30$N$3$H$r;X$9!#(B
-$B<~JUAuCV(B(peripheral device)$B!"(B
-$BF~=PNOAuCV(B(IO device)$B$H$b8F$P$l$k!#(B
+もともとスレッドのプログラムを割り込みのプログラムに書き換えるのは
+難しい。
 
-* $B%O!<%I%G%#%9%/(B(hard disks)
-* $B%-!<%\!<%I(B(keyboard)
-* $B%^%&%9(B(mouse)
-* $B%0%i%U%#%/%9!&%+!<%I(B(graphics card)
-* $B%M%C%H%o!<%/!&%$%s%?%U%'!<%9!&%+!<%I(B(network interface card)
+### ◆周辺装置(peripheral devices)
 
-### $B"!%O!<%I%&%'%"$N9=@.(B(hardware components)
+入出力装置(デバイス)、デバイス(device)
+とは、コンピュータの箱の中に内蔵されているハードウェアの部品やケーブル
+で外で接続する部品。
+普通は、CPU とメモリ以外のことを指す。
+周辺装置(peripheral device)、
+入出力装置(IO device)とも呼ばれる。
 
-$B%a%b%j!"#C#P#U!"%G%P%$%9$O!"%P%9(B(bus)($B%7%9%F%`!&%P%9(B(system bus))$B$rDL(B
-$B$8$F@\B3$5$l$F$$$k!#(B
-![$B?^#1!!%P%9$K$h$j@\B3$5$l$?#C#P#U!](./$BJB9T!&JBNs!&J,;6%W%m%0%i%_%s%0(B_concurrent,parallel,and distributed programming_files/hard-components.png)
+* ハードディスク(hard disks)
+* キーボード(keyboard)
+* マウス(mouse)
+* グラフィクス・カード(graphics card)
+* ネットワーク・インタフェース・カード(network interface card)
 
-**$B?^(B?$B!!%P%9$K$h$j@\B3$5$l$?#C#P#U!"%a%b%j!"%G%P%$%9(B(CPU, memory, and I/O devices connected with a bus)**
+### ◆ハードウェアの構成(hardware components)
 
-$B%P%9(B(bus)$B!'2?K\$+$NG[@~$NB+(B
+メモリ、ＣＰＵ、デバイスは、バス(bus)(システム・バス(system bus))を通
+じて接続されている。
+![図１　バスにより接続されたＣＰＵ、メモリ、デバイス](./並行・並列・分散プログラミング_concurrent,parallel,and distributed programming_files/hard-components.png)
 
-$B%"%I%l%9%P%9(B (address bus)
-:   $B%a%b%j$N%"%I%l%9$r<($9$?$a$N@~(B
+**図?　バスにより接続されたＣＰＵ、メモリ、デバイス(CPU, memory, and I/O devices connected with a bus)**
 
-$B%G!<%?%P%9(B (data bus)
-:   $B%G!<%?$rAw$k$?$a$N@~(B
+バス(bus)：何本かの配線の束
 
-$B%3%s%H%m!<%k%P%9(B (control bus)
-:   $B$=$NB>!"@)8fMQ$N@~(B
+アドレスバス (address bus)
+:   メモリのアドレスを示すための線
 
-### $B"!%G%P%$%9!&%3%s%H%m!<%i(B(device controller)
+データバス (data bus)
+:   データを送るための線
 
-$B3F%G%P%$%9$H(BCPU $B$G
+コントロールバス (control bus)
+:   その他、制御用の線
 
-$BNc!'%-!<%\!<%IMQ$N%3%s%H%m!<%i$NF/$-(B
+### ◆デバイス・コントローラ(device controller)
 
-$B%G!<%?$,!"EE5$?.9f$J$I$N7A$GAw$i$l$F$/$k!#%3%s%H%m!<%i$NCf$N%l%8%9%?(B(register)
-$B!J>.MFNL$N%a%b%j!K$KJ]B8$5$l!#(B
+各デバイスとCPU で実行されるプログラムとデバイスとり橋渡しをする機器。
 
-### $B"!(BCPU$B$H%G%P%$%9$N4V$N%G!<%?$N
+例：キーボード用のコントローラの働き
 
-CPU $B$+$i8+$($k>l=j(B
+データが、電気信号などの形で送られてくる。コントローラの中のレジスタ(register)
+（小容量のメモリ）に保存され。
 
-1. $B%G%P%$%9!&%3%s%H%m!<%i$,(B I/O $B6u4V$K$"$j!"%]!<%HHV9f(B(port number)$B$H(B
-   $B8F$P$l$kHVCO$,?6$i$l$F$$$k!#(BCPU $B$,!"%]!<%HHV9f$r;XDj$7$FF~=PNOL?Na(B(I/O
-   instruction)$B$r- $B%G%P%$%9!&%3%s%H%m!<%i$,!"IaDL$N%a%b%j$HF1$86u4V$K$"$j!"%a%b%jHVCO(B
-     (memory address)$B$,?6$i$l$F$$$k!#(BCPU $B$,!"$=$NHVCO$XIaDL$N%m!<%IL?Na(B
-     (load instruction)$B$d%9%H%"L?Na(B(store instruction)$B$G%"%/%;%9$9$k$H!"%3%s(B
-     $B%H%m!<%i$N%l%8%9%?$NFbMF$,FI$\_=q$-$G$-$k!#(BMMIO (Memory mapped I/O).
+### ◆CPUとデバイスの間のデータの受け渡しの方法
 
-$BF~=PNO$N;~$K(B CPU $B$,F/$/$+$I$&$+(B
+CPU から見える場所
 
-1. CPU $B$,F~=PNOL?Na(B(I/O instruction)$B!"$"$k$$$O!"%m!<%IL?Na(B(load
-   instruction)$B$d!?%9%H%"L?Na(B(store instruction)$B$r- DMA (Direct Memory Access)$B$d%P%9%^%9%?$H8F$P$l$k5!4o$,$"$j!"$=$N(B
-     $B5!4o$,(BCPU $B$,IaDL$KL?Na$rh$C
+1. デバイス・コントローラが I/O 空間にあり、ポート番号(port number)と
+   呼ばれる番地が振られている。CPU が、ポート番号を指定して入出力命令(I/O
+   instruction)を実行すると、I/O 空間にあるレジスタの内容が読み書きできる
+   (I/O 空間を示す信号線が1になる)。
+2. デバイス・コントローラが、普通のメモリと同じ空間にあり、メモリ番地
+   (memory address)が振られている。CPU が、その番地へ普通のロード命令
+   (load instruction)やストア命令(store instruction)でアクセスすると、コン
+   トローラのレジスタの内容が読み書きできる。MMIO (Memory mapped I/O).
 
-### $B"!%]!<%j%s%0$H3d$j9~$\_(B(polling and interrupt)
+入出力の時に CPU が働くかどうか
 
-CPU $B$NB.EY$KHf$Y$F!"%G%P%$%9$NB.EY$OCY$$!#(B
+1. CPU が入出力命令(I/O instruction)、あるいは、ロード命令(load
+   instruction)や／ストア命令(store instruction)を実行する。
+2. DMA (Direct Memory Access)やバスマスタと呼ばれる機器があり、その
+   機器がCPU が普通に命令を実行している合間をぬって一時的にバスを乗っ取り、
+   データをメモリにコピーする。
 
-* $BF~=PNO$N40N;$rBT$C$F$$$k$H(B CPU $B$NG=NO$,L5BL$K* $BJ#?t$NFHN)$7$?%G%P%$%9$O!"F1;~$KF0$+$7$?$$!#(B
-  * $B$"$k%W%m%;%9$,%G%P%$%9$X$NF~=PNO$r9T$J$$$?$$;~!"(BCPU $B$,$=$N=hM}$K(B
-    $B$D$-$C$-$j$K$J$C$F$7$^$&$H!"B>$N%W%m%;%9$^$G@h$K?J$a$J$/$J$k!#(B
+### ◆ポーリングと割り込み(polling and interrupt)
 
-$B2r7h:v(B
+CPU の速度に比べて、デバイスの速度は遅い。
 
-$B%]!<%j%s%0(B(polling)
-:   $B<~4|E\*(B(periodic)$B$K%G%P%$%9!&%3%s%H%m!<%i$N>uBV$r%A%'%C%/$9$k!#(B
+* 入出力の完了を待っていると CPU の能力が無駄に捨てられる。
+* 複数の独立したデバイスは、同時に動かしたい。
+* あるプロセスがデバイスへの入出力を行ないたい時、CPU がその処理に
+  つきっきりになってしまうと、他のプロセスまで先に進めなくなる。
 
-    * $B<~4|$,C;$$$H!"%A%'%C%/$N%X%C%I$,B?$/$J$k$,!"%G%P%$%9$H$N1~Ez$O$h(B
-      $B$/$J$k!#(B
-    * $B<~4|$,D9$$$H!"$=$N5U!#(B
+解決策
 
-$B3d$j9~$\_(B(interrupt)
-:   $BF~=PNO$,2DG=$K$J$C$?!?(BDMA$BE>Aw$,40N;$7$?;~$K%G%P%$%9$,(BCPU$B$KCN$i$;$k!#(B
+ポーリング(polling)
+:   周期的(periodic)にデバイス・コントローラの状態をチェックする。
 
-    * $BC10L$,9S$$;~$K$O!"%]!<%j%s%0$h$j$h$$!#(B
-    * $B3d$j9~$\_$,:Y$+$9$.$k!JKhIC?t(B1000$B0J>e!K$H!"3d$j9~$\_=hM}$N(B
-      $B%\*!<%P%X%C%I$,L5;k$G$-$J$/$J$k!#(B
-    * $B%W%m%0%i%\_%s%0$,Fq$7$$!#(B
+    * 周期が短いと、チェックのヘッドが多くなるが、デバイスとの応答はよ
+      くなる。
+    * 周期が長いと、その逆。
 
-$B3d$j9~$\_$N%?%$%\_%s%0(B
+割り込み(interrupt)
+:   入出力が可能になった／DMA転送が完了した時にデバイスがCPUに知らせる。
 
-$BF~NO%G%P%$%9(B(input device)
-:   $B%3%s%H%m!<%i$O!"F~NO%G!<%?$,E~Ce$9$k$H!"@)8f%P%9$N3d$j9~$\_MW5a(B(IRQ,
-    Interrupt Request)$B?.9f@~$r(B1$B$K$9$k!#(B
-    DMA$B$r;H$C$F$$$k;~$K$O!"%a%b%j$X$N%3%T!<$,40N;$7$?;~$K(B
-    $B?.9f@~$r(B1$B$K$9$k!#(B
+    * 単位が荒い時には、ポーリングよりよい。
+    * 割り込みが細かすぎる（毎秒数1000以上）と、割り込み処理の
+      オーバヘッドが無視できなくなる。
+    * プログラミングが難しい。
 
-$B=PNO%G%P%$%9(B(output device)
-:   $B%3%s%H%m!<%i$O!"=PNOMQ%P%C%U%!(B(output buffer)$B$,6u(B(empty)$B$K$J$k$H!"(B
-    $B3d$j9~$\_MW5a?.9f@~$r(B1$B$K$9$k!#(B
+割り込みのタイミング
 
-CPU $B$O!"3d$j9~$\_MW5a$r
+入力デバイス(input device)
+:   コントローラは、入力データが到着すると、制御バスの割り込み要求(IRQ,
+    Interrupt Request)信号線を1にする。
+    DMAを使っている時には、メモリへのコピーが完了した時に
+    信号線を1にする。
 
-### $B"!(BOS$B$N>eH>J,$H2J,(B(top half and bottom half)
+出力デバイス(output device)
+:   コントローラは、出力用バッファ(output buffer)が空(empty)になると、
+    割り込み要求信号線を1にする。
 
-![$B?^(B? $B%f!<%6!&%b!<%I$N%f!<%6!&%W%m%;%9!](./$BJB9T!&JBNs!&J,;6%W%m%0%i%_%s%0(B_concurrent,parallel,and distributed programming_files/os-top-half-bottom-half.png)
+CPU は、割り込み要求を受け付けると、現在実行中の処理を中断して、
+割り込みサービスルーチン(Interrupt Service Routine)
+あるいは
+割り込みハンドラ(interrupt handler)
+と呼ばれるプログラムを実行する。
+割り込み処理ルーチンでは、実際に入力命令を実行したり、
+次のデータを出力を開始する。
+最後に、割り込み処理から復帰する命令を実行する。すると、先ほど中断してい
+た処理が再開される。
 
-**$B?^(B?$B!!(BOS$B$N>eH>J,$H2J,(B**
-$B%+!<%M%k!&%b!<%I$N%f!<%6!&%W%m%;%9$H3d$j9~$\_%O%s%I%i$,6&M-%G!<%?$r%"%/%;(B
-$B%9$9$k!#(B
+### ◆OSの上半分と下半分(top half and bottom half)
 
-$BCm0U(B: Linux $B$G$O!"(Btop half $B$H(B bottom half $B$rJL$N0UL#$G;H$C$F$$$k!#(B
-[$B>pJs2J3XN`!V%\*%Z%l!<%F%#%s%0%7%9%F%`(BII$B!W$N;qNA(B](https://www.coins.tsukuba.ac.jp/~yas/coins/os2-2022/2023-01-20/index.html#interrupt-top-bottom)
-$B;2>H!#(B
+![図? ユーザ・モードのユーザ・プロセス、カーネル・モードのユーザ・プロセス、割り込みハンドラ、デバイス、共有データ](./並行・並列・分散プログラミング_concurrent,parallel,and distributed programming_files/os-top-half-bottom-half.png)
 
-### $B"!Aj8\_GS=|(B(mutual exclusion)
+**図?　OSの上半分と下半分**
+カーネル・モードのユーザ・プロセスと割り込みハンドラが共有データをアクセ
+スする。
 
-**$BAj8\_GS=|(B(mutual exclusion)**$B!'(B
-$B$"$k;q8;$r%"%/%;%9$G$-$k
+注意: Linux では、top half と bottom half を別の意味で使っている。
+[情報科学類「オペレーティングシステムII」の資料](https://www.coins.tsukuba.ac.jp/~yas/coins/os2-2022/2023-01-20/index.html#interrupt-top-bottom)
+参照。
 
-$B%W%m%0%i%`$N;zLL>e!"Aj8\_GS=|$,I,MW$JItJ,$r(B
-**$B:]$I$$ItJ,(B(critical section)**
+### ◆相互排除(mutual exclusion)
+
+**相互排除(mutual exclusion)**：
+ある資源をアクセスできる主体(スレッド)の数を多くても１つにする。
+
+プログラムの字面上、相互排除が必要な部分を
+**際どい部分(critical section)**
 (
-**$B%/%j%F%#%+%k%;%/%7%g%s(B**
+**クリティカルセクション**
 )
-$B$H$$$&!#(B
+という。
 
-### $B"!3d$j9~$\_6X;\_(B(disabling interrupts)
+### ◆割り込み禁止(disabling interrupts)
 
-CPU$B$K$O!"3d$j9~$\_$r6X;\_(B/$B5v2D$9$kL?Na$,$"$k!#(B
+CPUには、割り込みを禁止/許可する命令がある。
 
-$BNc(B: x86
+例: x86
 
 ```
      di		# disable interrupts
@@ -698,13 +737,15 @@ CPU$B$K$O!"3d$j9~$\_$r6X;\_(B/$B5v2D$9$kL?Na$,$"$k!#(B
 
 ```
 
-$BC10l%W%m%;%C%5$G$O!"3d$j9~$\_6X;\_$r;H$C$FAj8\_GS=|$ruBV$G!"<+J,$,F0$$$F$$$l$P!"B>$N%b%8%e!<%k$,F0$/$3$H$O$"$jF@$J$$!#(B
+単一プロセッサでは、割り込み禁止を使って相互排除を実現できる。
+割り込み禁止の状態で、自分が動いていれば、他のモジュールが動くことはあり得ない。
 
-$B3d$j9~$\_6X;\_$O!"7Z$$(B(lightweight)$B!#(BCPU$B$NL?Na$G(B1$BL?Na$+$i?tL?Na$G
+割り込み禁止は、軽い(lightweight)。CPUの命令で1命令から数命令で実装可能である。
 
-$B%^%k%A%W%m%;%C%5$G$O!"3d$j9~$\_6X;\_$r;H$C$FAj8\_GS=|$r
+マルチプロセッサでは、割り込み禁止を使って相互排除を実現できない。
+In a multiprocessor system, it is impossible to realize mutual exclusion by disabling interrupts.
 
-### $B"!3d$j9~$\_%O%s%I%i(B($B3d$j9~$\_6X;\_$J$7(B==$B%P%0F~$j(B) (interrupt hander without disabling interrupts (with a bug))
+### ◆割り込みハンドラ(割り込み禁止なし==バグ入り) (interrupt hander without disabling interrupts (with a bug))
 
 ```
 int shared_resource ;
@@ -727,21 +768,21 @@ interrupt_handler()
 
 ```
 
-### $B"!3d$j9~$\_%l%Y%k(B(Interrupt level)
+### ◆割り込みレベル(Interrupt level)
 
-PDP-11 $B$K$O!"3d$j9~$\_6X;\_$N%l%Y%k$,(B 7 $BCJ3,(B(3$B%S%C%H(B)$B$"$C$?!#(B
-SPL (Set Priority Level) $BL?Na!#(B
-
-```
-    splhigh(); /* $B3d$j9~$_6X;_(B disable interrupt */
-    $B!c:]$I$$ItJ,!#(Bcritical section.$B!d(B
-    spl0(); /* $B3d$j9~$_5v2D(B enable interrupt */
+PDP-11 には、割り込み禁止のレベルが 7 段階(3ビット)あった。
+SPL (Set Priority Level) 命令。
 
 ```
+    splhigh(); /* 割り込み禁止 disable interrupt */
+    ＜際どい部分。critical section.＞
+    spl0(); /* 割り込み許可 enable interrupt */
 
-### $B"!3d$j9~$\_%O%s%I%i(B($B3d$j9~$\_6X;\_M-$j(B)(interrupt hander with disabling interrupts (bug fixed))
+```
 
-$B>e$N%W%m%0%i%`$r=q$-D>$9!#(B
+### ◆割り込みハンドラ(割り込み禁止有り)(interrupt hander with disabling interrupts (bug fixed))
+
+上のプログラムを書き直す。
 
 ```
 int shared_resource ;
@@ -768,18 +809,18 @@ interrupt_handler()
 
 ```
 
-### $B"!B?=E3d$j9~$\_(B(multiple interrupt)
+### ◆多重割り込み(multiple interrupt)
 
-$BB?=E$N3d$j9~$\_$r5v$9!#(B
+多重の割り込みを許す。
 
 ```
-x = spltty(); /* $B3d$j9~$_%l%Y%k$r(B TTY $B%l%Y%k$K>e$2$k!#(B
+x = spltty(); /* 割り込みレベルを TTY レベルに上げる。
                  Block interrupts from TTY devices (IPL_TTY). */
 
-    $B!c$3$N4V$O!"(BIPL_TTY $B%l%Y%k0J2<$K$D$$$FAj8_GS=|$5$l$k!#(B
-      Mutual exclusion for IPL_TTY and lower. $B!d(B
+    ＜この間は、IPL_TTY レベル以下について相互排除される。
+      Mutual exclusion for IPL_TTY and lower. ＞
 
-spl(x); /* $B3d$j9~$_%l%Y%k$r85$K$b$I$9!#(B
+spl(x); /* 割り込みレベルを元にもどす。
            Restore the system priority level to the previous one. */
 
 ```
@@ -789,73 +830,84 @@ splvm(), spllock(), spllowersoftclock(), splnet(), splsched(),
 splserial(), splsoftclock(), splsoftnet(), splsoftserial(),
 splstatclock(), spltty(), splvm(), splx()
 
-$BC10l%W%m%;%C%5$G$O!"3d$j9~$\_%l%Y%k$rD4@0$7$?J}$,8zN($,$h$$$7!"(B
-$BJBNs@-$b9b$/$J$k!#$7$+$7!"(BSMP $B$G$O!"$3$NJ}K!$O;H$($J$$!#(B
+単一プロセッサでは、割り込みレベルを調整した方が効率がよいし、
+並列性も高くなる。しかし、SMP では、この方法は使えない。
 
-$B%8%c%$%"%s%H!&%m%C%/(B(giant lock)$B!#(Bsplhigh() $B$KMj$C$?%W%m%0%i%\_%s%0!#(B
+ジャイアント・ロック(giant lock)。splhigh() に頼ったプログラミング。
 
-### $B"!3d$j9~$\_$+$i%a%C%;!<%8$X$NJQ49(B(translating interrupts into messages)
+### ◆割り込みからメッセージへの変換(translating interrupts into messages)
 
-$B%+!<%M%k$N3d$j9~$\_=hM}$N%W%m%0%i%`$OFq$7$$!#(B
-$B3d$j9~$\_$r%W%m%;%94VDL?.$KJQ49$7$F%a%C%;!<%8!&%Q%C%7%s%0$N@$3&$G$b$N$r9M(B
-$B$($?$$!#(B
+カーネルの割り込み処理のプログラムは難しい。
+割り込みをプロセス間通信に変換してメッセージ・パッシングの世界でものを考
+えたい。
 
-$B3d$j9~$\_6X;\_$N;~4V$,C;$/$J$j!"1~Ez@-(B(responsiveness)$B$,>e$,$k!#(B
+割り込み禁止の時間が短くなり、応答性(responsiveness)が上がる。
 
-$BK\Ev$N3d$j9~$\_6X;\_$d!"3d$j9~$\_%l%Y%k$K$h$kM%@hEYIU$1(B(prioritize)$B$,$G$-$J$/$J$k!#(B
+本当の割り込み禁止や、割り込みレベルによる優先度付け(prioritize)ができなくなる。
 
-## $B"#N}=,LdBj(B(exercise)1 $BJB9T!&JBNs!&J,;6%W%m%0%i%\_%s%0(B/concurrent,parallel,and distributed programming
+## ■練習問題(exercise)1 並行・並列・分散プログラミング/concurrent,parallel,and distributed programming
 
-$B$B%l%]!<%HDs=P%Z!<%8(B
-$B$+$iDs=P$7$J$5$$!#(B
+次の内容を含む「テキスト」ファイルを作成し、
+[レポート提出ページ](https://www.cs.tsukuba.ac.jp/~yas/cs/csys-2023/reports.html)
+から提出しなさい。
 
-$B2sEz$O!"$3$N%Z!<%8$K4^$^$l$F$$$k!#(B
-Wikipedia, ChatGPT, $B$=$NB>$N?.Mj$G$-$J$$%=!<%9$+$iF@$?FbMF$r%3%T!<$7$F2sEz$7$J$$$3$H!#(B
+回答は、このページに含まれている。
+Wikipedia, ChatGPT, その他の信頼できないソースから得た内容をコピーして回答しないこと。
 
 Answers are included in this page.
 You should not copy the contents from untested sources,
 including Wikipedia and ChatGPT.
 
-### $B!zLdBj(B(101) $BJB9T%W%m%0%i%`$NFCD'(B
+### ★問題(101) 並行プログラムの特徴
 
-$B- $B$"$k%3%s%T%e!<%?$G(B2$B$D$NFHN)$7$?C`- $B$"$k%3%s%T%e!<%?$G(B2$B$D$N%W%m%;%9$r4^$`(B1$B$D$NJB9T%W%m%0%i%`$,F0:n$7$F$$$k!#(B
+次の2つを比較し、重要な共通点を１つと重要な相違点を１つ述べなさい。
 
-  Compare the following two items and write an important common thing and an important diffidence between these two items.
+* あるコンピュータで2つの独立した逐次プログラムが動作している。
+* あるコンピュータで2つのプロセスを含む1つの並行プログラムが動作している。
 
-  * Two independent sequential programs are running in a computer.
-  * A concurrent program that includes two processes is runningin a computer.
+Compare the following two items and write an important common thing and an important diffidence between these two items.
 
-  ### $B!zLdBj(B(102) $BJ,;6=hM}(B(A)$B$NMxE@(B
+* Two independent sequential programs are running in a computer.
+* A concurrent program that includes two processes is runningin a computer.
 
-  $B:#F|$Nl9g!"C`
+### ★問題(102) 分散処理(A)の利点
+
+今日の授業では、分散処理を (A) と (B) の 2種類に分けた。
+このうち、(A) は、逐次処理より遅いことがある。
+この場合、逐次処理と比較して分散処理を利用する重要な利点を１つ答えなさい。
 
 In this class, we classify distributed processing into Type (A) and Type (B).
 We often use distributed processing of Type (A) that is slower than sequential processing.
 In this case, answer an important advantage of using the distributed processing over using the sequential processing.
 
-### $B!zLdBj(B(103) $B%H!<%i%9(B
+### ★問題(103) トーラス
 
-[4 x 3 $B$N(B 2 $B$B$G!"(B
-$B3F%N!<%I$KNY@\$7$F$$$k%N!<%I?t$O!"$$$/$D$+!#(B
-$B:GBg%[%C%W?t$O$$$/$D$+!#(B
+[4 x 3 の 2 次元のトーラス](https://www.cs.tsukuba.ac.jp/~yas/cs/csys-2023/2023-04-14/index.html#torus)で、
+各ノードに隣接しているノード数は、いくつか。
+最大ホップ数はいくつか。
 
 In [the 4 x 3 tours](https://www.cs.tsukuba.ac.jp/~yas/cs/csys-2023/2023-04-14/index.html#torus),
 how many neighbor nodes does each node have?
 What is the max hop count?
 
-### $B!zLdBj(B(104) $B$-$o$I$$ItJ,(B
+### ★問題(104) きわどい部分
 
-$B>e$N(B[$B!V3d$j9~$\_%O%s%I%i(B($B3d$j9~$\_6X;\_M-$j(B)$B!W(B](https://www.cs.tsukuba.ac.jp/~yas/cs/csys-2023/2023-04-14/index.html#isr-di)$B$N%W%m%0%i(B
-$B%`$K$D$$$F!"$-$o$I$$ItJ,(B(critical section)$B$O$I$3$+!"0u$r$D$1$J$5$$!#(B
+上の[「割り込みハンドラ(割り込み禁止有り)」](https://www.cs.tsukuba.ac.jp/~yas/cs/csys-2023/2023-04-14/index.html#isr-di)のプログラ
+ムについて、きわどい部分(critical section)はどこか、印をつけなさい。
 
 In [the interrupt hander with disabling interrupts](https://www.cs.tsukuba.ac.jp/~yas/cs/csys-2023/2023-04-14/index.html#isr-di),
 mark the critical section of the program.
 
-### $B!zLdBj(B(105) $B3d$j9~$\_6X;\_$N8B3&(B
+### ★問題(105) 割り込み禁止の限界
 
-$BAj8\_GS=|$N
+相互排除の実現に割り込み禁止を使うことの重要な限界を1つ述べなさい。
+Write an important limitation of using disabling interrupts for
+implementing mutual exclusion.
+
+---
+
 Last updated: 2023/04/14 16:28:05
 
  [Yasushi Shinjo](http://www.cs.tsukuba.ac.jp/~yas/) / <yas@cs.tsukuba.ac.jp>
 
-![](chrome-extension://dbjibobgilijgolhjdcbdebjhejelffo/assets/icon.png)](https://www.cs.tsukuba.ac.jp/~yas/cs/csys-2023/2023-04-14/index.html#torus)
+![](chrome-extension://dbjibobgilijgolhjdcbdebjhejelffo/assets/icon.png)
