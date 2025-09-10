@@ -8,7 +8,6 @@
 			       システム情報工学研究科/コンピュータサイエンス専攻
                                新城 靖
                                <yas@cs.tsukuba.ac.jp>
-
 ```
 
 このページは、次の URL にあります。
@@ -62,7 +61,6 @@ main()
 {
 	printf("hello, world!\n");
 }
-
 ```
 
 逐次プログラムでは、1度に1つの手続き(関数)(procedure(function))しか実行
@@ -517,8 +515,7 @@ Machシステムでの分類 ( Mach operating system kernel, Mach microkernel )
 
 ### ◆共有メモリ型マルチプロセッサ、SMP (Shared memory multiprocessor)
 
-![(CPU+Cache)*n+メ
-モリ](./並行・並列・分散プログラミング_concurrent,parallel,and distributed programming_files/shared-memory-multiprocesor.png)
+![(CPU+Cache)*n+メ モリ](./並行・並列・分散プログラミング_concurrent,parallel,and distributed programming_files/shared-memory-multiprocesor.png)
 
 **図? 共有メモリ型マルチプロセッサ(バス共有) (Shared memory multiprocessor (with a shared bus))**
 
@@ -734,7 +731,6 @@ CPUには、割り込みを禁止/許可する命令がある。
      di		# disable interrupts
      ....
      ei		# enable interrupts
-
 ```
 
 単一プロセッサでは、割り込み禁止を使って相互排除を実現できる。
@@ -765,7 +761,6 @@ interrupt_handler()
     x = x + 1 ;
     shared_resource = x ;
 }
-
 ```
 
 ### ◆割り込みレベル(Interrupt level)
@@ -777,7 +772,6 @@ SPL (Set Priority Level) 命令。
     splhigh(); /* 割り込み禁止 disable interrupt */
     ＜際どい部分。critical section.＞
     spl0(); /* 割り込み許可 enable interrupt */
-
 ```
 
 ### ◆割り込みハンドラ(割り込み禁止有り)(interrupt hander with disabling interrupts (bug fixed))
@@ -806,7 +800,6 @@ interrupt_handler()
     shared_resource = x ;
     spl0();
 }
-
 ```
 
 ### ◆多重割り込み(multiple interrupt)
@@ -822,7 +815,6 @@ x = spltty(); /* 割り込みレベルを TTY レベルに上げる。
 
 spl(x); /* 割り込みレベルを元にもどす。
            Restore the system priority level to the previous one. */
-
 ```
 
 NetBSD man page: spl(), spl0(), splbio(), splclock(), splhigh(),
